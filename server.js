@@ -1,14 +1,14 @@
-var fs = require('fs');
-var thrift = require('thrift');
-var Calculator = require('./gen-nodejs/Calculator');
-var ttypes = require('./gen-nodejs/tutorial_types');
-var SharedStruct = require('./gen-nodejs/shared_types').SharedStruct;
+const fs = require('fs');
+const thrift = require('thrift');
+const Calculator = require('./gen-nodejs/Calculator');
+const ttypes = require('./gen-nodejs/tutorial_types');
+const SharedStruct = require('./gen-nodejs/shared_types').SharedStruct;
 
 const ca = require('./ca');
 
-var data = {};
+const data = {};
 
-var server = thrift.createServer(
+const server = thrift.createServer(
   Calculator,
   {
     ping: function(result) {
@@ -24,7 +24,7 @@ var server = thrift.createServer(
     calculate: function(logid, work, result) {
       console.log('calculate(', logid, ',', work, ')');
 
-      var val = 0;
+      let val = 0;
       if (work.op == ttypes.Operation.ADD) {
         val = work.num1 + work.num2;
       } else if (work.op === ttypes.Operation.SUBTRACT) {
@@ -33,7 +33,7 @@ var server = thrift.createServer(
         val = work.num1 * work.num2;
       } else if (work.op === ttypes.Operation.DIVIDE) {
         if (work.num2 === 0) {
-          var x = new ttypes.InvalidOperation();
+          const x = new ttypes.InvalidOperation();
           x.whatOp = work.op;
           x.why = 'Cannot divide by 0';
           result(x);
@@ -41,14 +41,14 @@ var server = thrift.createServer(
         }
         val = work.num1 / work.num2;
       } else {
-        var x = new ttypes.InvalidOperation();
+        const x = new ttypes.InvalidOperation();
         x.whatOp = work.op;
         x.why = 'Invalid operation';
         result(x);
         return;
       }
 
-      var entry = new SharedStruct();
+      const entry = new SharedStruct();
       entry.key = logid;
       entry.value = '' + val;
       data[logid] = entry;

@@ -1,18 +1,18 @@
-var fs = require('fs');
-var thrift = require('thrift');
-var Calculator = require('./gen-nodejs/Calculator');
-var ttypes = require('./gen-nodejs/tutorial_types');
+const fs = require('fs');
+const thrift = require('thrift');
+const Calculator = require('./gen-nodejs/Calculator');
+const ttypes = require('./gen-nodejs/tutorial_types');
 
 const ca = require('./ca');
 
-var connection = thrift.createSSLConnection(
+const connection = thrift.createSSLConnection(
   // '192.168.8.198',
   'localhost',
   9022,
   {
     transport: thrift.TFramedTransport,
     protocol: thrift.TBinaryProtocol,
-    rejectUnauthorized: false,
+    rejectUnauthorized: false
     // key: ca.key,
     // cert: ca.cert,
     // ca: ca.ca
@@ -29,7 +29,7 @@ connection.on('error', function(err) {
 });
 
 // Create a Calculator client with the connection
-var client = thrift.createClient(Calculator, connection);
+const client = thrift.createClient(Calculator, connection);
 
 client.ping(function(err, response) {
   console.log('ping()');
